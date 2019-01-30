@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20170305190953 extends AbstractMigration
+class Version20170309200319 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -18,8 +18,8 @@ class Version20170305190953 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE shop ADD icon VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE source ADD icon VARCHAR(255) DEFAULT NULL');
+        $this->addSql('DROP INDEX UNIQ_F7C0246A5E237E06 ON size');
+        $this->addSql('CREATE UNIQUE INDEX size_unique ON size (name, category_id)');
     }
 
     /**
@@ -30,7 +30,7 @@ class Version20170305190953 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE shop DROP icon');
-        $this->addSql('ALTER TABLE source DROP icon');
+        $this->addSql('DROP INDEX size_unique ON size');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_F7C0246A5E237E06 ON size (name)');
     }
 }

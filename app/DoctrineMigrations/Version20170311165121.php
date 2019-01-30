@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20170306125914 extends AbstractMigration
+class Version20170311165121 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -18,7 +18,9 @@ class Version20170306125914 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE order_row CHANGE size_id size_id INT DEFAULT NULL, CHANGE shop_id shop_id INT DEFAULT NULL, CHANGE order_id order_id INT DEFAULT NULL, CHANGE type_id type_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE shop ADD icon_id INT DEFAULT NULL');
+        $this->addSql('ALTER TABLE shop ADD CONSTRAINT FK_AC6A4CA254B9D732 FOREIGN KEY (icon_id) REFERENCES media (id)');
+        $this->addSql('CREATE INDEX IDX_AC6A4CA254B9D732 ON shop (icon_id)');
     }
 
     /**
@@ -29,6 +31,8 @@ class Version20170306125914 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE order_row CHANGE order_id order_id INT NOT NULL, CHANGE type_id type_id INT NOT NULL, CHANGE size_id size_id INT NOT NULL, CHANGE shop_id shop_id INT NOT NULL');
+        $this->addSql('ALTER TABLE shop DROP FOREIGN KEY FK_AC6A4CA254B9D732');
+        $this->addSql('DROP INDEX IDX_AC6A4CA254B9D732 ON shop');
+        $this->addSql('ALTER TABLE shop DROP icon_id');
     }
 }

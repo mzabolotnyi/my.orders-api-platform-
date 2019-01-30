@@ -47,11 +47,6 @@ class SizeCategory
     private $sizes;
 
 
-    public function __construct()
-    {
-        $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
     public function getId(): int
     {
         return $this->id;
@@ -68,21 +63,5 @@ class SizeCategory
     {
         return $this->name;
     }
-
-    public function addSize(\Home\OrderBundle\Entity\Size $size): SizeCategory
-    {
-        $this->sizes[] = $size;
-
-        return $this;
-    }
-
-    public function removeSize(\Home\OrderBundle\Entity\Size $size): bool
-    {
-        return $this->sizes->removeElement($size);
-    }
-
-    public function getSizes()
-    {
-        return $this->sizes;
-    }
 }
+

@@ -4,14 +4,18 @@ namespace Home\OrderBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
  * Size
  *
- * @ApiResource
- * @ORM\Table(name="size")
+ * @ApiResource(attributes={"normalization_context"={"groups"={"size"}}})
+ * @ORM\Table(name="size", uniqueConstraints={@UniqueConstraint(name="size_unique", columns={"name", "category_id"})})
  * @ORM\Entity
+ * @UniqueEntity(fields={"name", "category"})
  */
 class Size
 {
@@ -29,7 +33,8 @@ class Size
      *
      * @Assert\NotBlank
      * @Assert\Length(max="255")
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @Groups({"size", "size_category"})
+     * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
@@ -37,7 +42,8 @@ class Size
      * @var SizeCategory
      *
      * @Assert\NotNull
-     * @ORM\ManyToOne(targetEntity="SizeCategory")
+     * @Groups({"size"})
+     * @ORM\ManyToOne(targetEntity="SizeCategory", inversedBy="sizes", cascade={"persist"})
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
      */
     private $category;

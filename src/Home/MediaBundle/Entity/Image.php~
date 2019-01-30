@@ -1,0 +1,47 @@
+<?php
+
+namespace Home\MediaBundle\Entity;
+
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Class Image
+ *
+ * @ApiResource(attributes={"normalization_context"={"groups"={"image"}}})
+ * @ORM\Table(name="image")
+ * @ORM\Entity
+ */
+class Image
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(max="255")
+     * @Groups({"image"})
+     * @ORM\Column(name="path", type="string", length=255)
+     */
+    private $path;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(max="255")
+     * @Groups({"image"})
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     */
+    private $originName;
+}

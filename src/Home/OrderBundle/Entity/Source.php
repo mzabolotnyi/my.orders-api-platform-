@@ -3,21 +3,20 @@
 namespace Home\OrderBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * SizeCategory
+ * Source
  *
- * @ApiResource(attributes={"normalization_context"={"groups"={"size_category"}}})
- * @ORM\Table(name="size_category")
+ * @ApiResource(attributes={"normalization_context"={"groups"={"source"}}})
+ * @ORM\Table(name="source")
  * @ORM\Entity
- * @UniqueEntity("name")
+ * @UniqueEntity(fields={"name"})
  */
-class SizeCategory
+class Source
 {
     /**
      * @var int
@@ -33,31 +32,36 @@ class SizeCategory
      *
      * @Assert\NotBlank
      * @Assert\Length(max="255")
-     * @Groups({"size_category", "size"})
+     * @Groups({"source"})
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     private $name;
 
     /**
-     * @var ArrayCollection
+     * @var string
      *
-     * @Groups({"size_category"})
-     * @ORM\OneToMany(targetEntity="Size", mappedBy="category", cascade={"persist"})
+     * @Assert\Url
+     * @Assert\Length(max="255")
+     * @Groups({"source"})
+     * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
-    private $sizes;
+    private $url;
 
+    /**
+     * @var string
+     *
+     * @Groups({"source"})
+     * @ORM\Column(name="comment", type="text", nullable=true)
+     */
+    private $comment;
 
-    public function __construct()
-    {
-        $this->sizes = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function setName(string $name): SizeCategory
+    public function setName(string $name): Source
     {
         $this->name = $name;
 
@@ -69,20 +73,27 @@ class SizeCategory
         return $this->name;
     }
 
-    public function addSize(\Home\OrderBundle\Entity\Size $size): SizeCategory
+    public function setUrl(string $url): Source
     {
-        $this->sizes[] = $size;
+        $this->url = $url;
 
         return $this;
     }
 
-    public function removeSize(\Home\OrderBundle\Entity\Size $size): bool
+    public function getUrl(): string
     {
-        return $this->sizes->removeElement($size);
+        return $this->url ?: '';
     }
 
-    public function getSizes()
+    public function setComment(string $comment): Source
     {
-        return $this->sizes;
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getComment(): string
+    {
+        return $this->comment ?: '';
     }
 }
